@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nguyên Lý Kế Toán - Giúp Bé Thư</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Quicksand','Segoe UI',system-ui,sans-serif; }
+  body { min-height: 100vh; background: linear-gradient(135deg,#f0f9ff,#e0f2fe,#dbeafe); padding: 20px 16px 60px; color: #1e3a5f; }
+  .app { max-width: 1250px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 18px; }
+  h1 { font-size: clamp(1.4rem,4vw,2.2rem); color: #0c4a6e; text-shadow: 3px 3px 0 #bae6fd; font-weight: 700; margin-bottom: 8px; }
+  .subtitle { color: #0369a1; font-size: .92rem; background: #e0f2fe; display: inline-block; padding: 6px 18px; border-radius: 40px; border: 2px dashed #7dd3fc; font-weight: 600; }
+  .tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; margin-bottom: 18px; padding: 8px; background: #f0f9ff; border-radius: 30px; box-shadow: 0 6px 0 #bae6fd; border: 2px solid #7dd3fc; }
+  .tab-btn { border: none; background: transparent; padding: 8px 12px; border-radius: 30px; font-size: .78rem; font-weight: 700; color: #0369a1; cursor: pointer; transition: .2s; white-space: nowrap; font-family: inherit; }
+  .tab-btn:hover { background: #e0f2fe; }
+  .tab-btn.active { background: #7dd3fc; color: #0c4a6e; box-shadow: 0 4px 0 #0284c7; transform: translateY(-2px); }
+  .tab-btn.tools-tab { background: linear-gradient(135deg,#fef3c7,#fde68a); color: #92400e; }
+  .tab-btn.tools-tab.active { background: #fbbf24; color: #78350f; box-shadow: 0 4px 0 #d97706; }
+  .panel { background: #fff; border-radius: 30px; padding: 24px; box-shadow: 0 12px 0 #bae6fd; border: 2px solid #7dd3fc; display: none; }
+  .panel.active { display: block; animation: fadeIn .3s; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .panel h2 { color: #0369a1; font-size: 1.3rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .chapter-badge { background: #7dd3fc; color: #0c4a6e; padding: 4px 14px; border-radius: 30px; font-size: .75rem; font-weight: 800; }
+  .desc { color: #0e7490; font-size: .88rem; margin-bottom: 16px; line-height: 1.6; background: #f0f9ff; padding: 12px 16px; border-radius: 16px; border-left: 4px solid #7dd3fc; }
+  .btn { border: none; padding: 12px 22px; border-radius: 40px; font-size: .88rem; font-weight: 700; cursor: pointer; transition: .1s; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-primary { background: #7dd3fc; color: #0c4a6e; box-shadow: 0 6px 0 #0284c7; transform: translateY(-3px); }
+  .btn-primary:active { box-shadow: 0 2px 0 #0284c7; transform: translateY(3px); }
+  .btn-secondary { background: #e0f2fe; color: #0369a1; box-shadow: 0 4px 0 #a5d8f0; transform: translateY(-2px); }
+  .btn-secondary:active { box-shadow: 0 1px 0 #a5d8f0; transform: translateY(2px); }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .chapter-list { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 12px; margin-top: 12px; }
+  .chapter-item { background: #fff; border-radius: 18px; padding: 14px 16px; border: 2px solid #bae6fd; box-shadow: 0 4px 0 #bae6fd; cursor: pointer; transition: .2s; }
+  .chapter-item:hover { transform: translateY(-3px); border-color: #7dd3fc; box-shadow: 0 6px 0 #7dd3fc; }
+  .chapter-item .num { display: inline-block; background: #7dd3fc; color: #0c4a6e; width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 50%; font-weight: 800; margin-right: 10px; font-size: .82rem; }
+  .chapter-item .title { font-weight: 800; color: #0c4a6e; font-size: .9rem; }
+  .chapter-item .sub { color: #0e7490; font-size: .78rem; margin-top: 4px; margin-left: 38px; line-height: 1.4; }
+  .section-title { font-size: 1.05rem; font-weight: 800; color: #0369a1; margin: 20px 0 10px; padding-left: 12px; border-left: 4px solid #7dd3fc; }
+  .theory-box { background: #fdf4ff; border-radius: 16px; padding: 12px 16px; margin: 10px 0; border-left: 5px solid #e879f9; font-size: .86rem; line-height: 1.65; color: #701a75; }
+  .theory-box::before { content: "📖 LÝ THUYẾT: "; font-weight: 800; color: #a21caf; }
+  .tip-card { background: #fef9c3; border-radius: 18px; padding: 14px 18px; margin: 10px 0; border-left: 5px solid #facc15; font-size: .87rem; line-height: 1.65; color: #713f12; }
+  .tip-card .tip-label { display: inline-block; background: #facc15; color: #422006; padding: 2px 10px; border-radius: 20px; font-size: .7rem; font-weight: 800; margin-bottom: 6px; }
+  .tip-card .tip-title { font-weight: 800; color: #854d0e; font-size: .92rem; display: block; margin-bottom: 4px; }
+  .tip-card .tip-example { background: #fff; border-radius: 12px; padding: 10px 14px; margin-top: 8px; border: 1px dashed #facc15; font-size: .84rem; color: #713f12; line-height: 1.6; }
+  .tip-card .tip-example::before { content: "🌾 VÍ DỤ: "; font-weight: 800; color: #a16207; }
+  .exercise-card { background: #eff6ff; border: 2px solid #93c5fd; border-radius: 18px; padding: 16px 18px; margin: 12px 0; box-shadow: 0 4px 0 #bfdbfe; }
+  .exercise-card .ex-badge { background: #3b82f6; color: #fff; padding: 3px 12px; border-radius: 20px; font-size: .72rem; font-weight: 800; display: inline-block; margin-bottom: 8px; }
+  .exercise-card .ex-title { font-weight: 800; color: #1e3a5f; font-size: .95rem; display: inline-block; margin-left: 8px; }
+  .exercise-card .ex-question { background: #fff; padding: 12px 14px; border-radius: 12px; font-size: .86rem; color: #1e3a5f; line-height: 1.6; margin: 8px 0; border-left: 4px solid #93c5fd; }
+  .ex-solution-btn { background: #3b82f6; color: #fff; border: none; padding: 8px 18px; border-radius: 30px; font-size: .8rem; font-weight: 700; cursor: pointer; font-family: inherit; box-shadow: 0 3px 0 #1d4ed8; }
+  .ex-solution-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #1d4ed8; }
+  .ex-solution { display: none; margin-top: 12px; background: #fff; padding: 14px 16px; border-radius: 12px; font-size: .85rem; line-height: 1.7; color: #14532d; border: 2px dashed #4ade80; }
+  .ex-solution.show { display: block; }
+  .ex-solution::before { content: "✅ LỜI GIẢI"; display: block; font-weight: 800; color: #15803d; margin-bottom: 8px; }
+  
+  /* TOOLS */
+  .sub-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; padding: 10px; background: linear-gradient(135deg,#fef3c7,#fef9c3); border-radius: 24px; border: 2px solid #fcd34d; box-shadow: 0 4px 0 #fcd34d; }
+  .sub-tab { border: none; background: #fff; padding: 9px 16px; border-radius: 20px; font-size: .83rem; font-weight: 700; color: #92400e; cursor: pointer; transition: .2s; font-family: inherit; border: 2px solid transparent; }
+  .sub-tab:hover { background: #fffbeb; border-color: #fcd34d; }
+  .sub-tab.active { background: #fbbf24; color: #78350f; box-shadow: 0 3px 0 #d97706; transform: translateY(-1px); }
+  .sub-panel { display: none; }
+  .sub-panel.active { display: block; }
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(360px,1fr)); gap: 18px; }
+  .tool-card { background: #fff; border-radius: 22px; padding: 20px; border: 2px solid #bae6fd; box-shadow: 0 6px 0 #bae6fd; }
+  .tool-card .tool-header { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; margin-bottom: 14px; border-bottom: 2px dashed #bae6fd; }
+  .tool-card .tool-icon { background: linear-gradient(135deg,#7dd3fc,#38bdf8); color: #fff; width: 42px; height: 42px; line-height: 42px; text-align: center; border-radius: 14px; font-size: 1.3rem; flex-shrink: 0; box-shadow: 0 3px 0 #0284c7; }
+  .tool-card .tool-title { font-weight: 800; color: #0c4a6e; font-size: 1rem; }
+  .tool-card .tool-desc { font-size: .76rem; color: #0e7490; font-weight: 600; margin-top: 2px; }
+  .tool-card .tool-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .field { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .field label { font-size: .8rem; font-weight: 700; color: #0c4a6e; flex: 1; }
+  .field input, .field select { padding: 8px 12px; border: 2px solid #7dd3fc; border-radius: 10px; font-size: .85rem; font-weight: 600; color: #1e3a5f; outline: none; font-family: inherit; flex: 1; max-width: 55%; text-align: right; }
+  .field input:focus, .field select:focus { border-color: #0ea5e9; box-shadow: 0 0 0 3px #e0f2fe; }
+  .tool-btn { width: 100%; background: linear-gradient(135deg,#7dd3fc,#38bdf8); color: #fff; border: none; padding: 12px; border-radius: 14px; font-size: .9rem; font-weight: 800; cursor: pointer; font-family: inherit; box-shadow: 0 5px 0 #0284c7; transition: .1s; }
+  .tool-btn:active { box-shadow: 0 2px 0 #0284c7; transform: translateY(3px); }
+  .tool-result { background: linear-gradient(135deg,#f0f9ff,#e0f2fe); border-radius: 14px; padding: 14px 16px; font-size: .88rem; color: #0c4a6e; font-weight: 600; line-height: 1.6; display: none; border-left: 4px solid #0ea5e9; margin-top: 4px; }
+  .tool-result.show { display: block; }
+  .tool-result .big-num { font-size: 1.3rem; font-weight: 800; color: #0c4a6e; display: block; text-align: center; padding: 8px 0; font-family: 'Courier New', monospace; }
+  .tool-result .row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #bae6fd; font-size: .82rem; }
+  .tool-result .row:last-child { border-bottom: none; }
+  .tool-result .row .val { font-family: 'Courier New', monospace; font-weight: 800; color: #0c4a6e; }
+  .tool-result .ok { color: #16a34a; }
+  .tool-result .err { color: #dc2626; }
+  .tool-result .def-khoan { background: #fff; padding: 10px 12px; border-radius: 10px; margin-top: 8px; font-family: 'Courier New', monospace; font-size: .8rem; color: #7c2d12; line-height: 1.7; border: 1px dashed #fbbf24; }
+  
+  .je-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .je-row input { padding: 8px 10px; border: 2px solid #7dd3fc; border-radius: 10px; font-size: .82rem; font-weight: 600; font-family: inherit; outline: none; }
+  .je-header { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 6px; font-weight: 800; color: #0369a1; font-size: .78rem; }
+  
+  .flashcard { background: linear-gradient(135deg,#fff,#f0f9ff); border: 2px solid #7dd3fc; border-radius: 24px; padding: 30px 24px; text-align: center; min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 8px 0 #bae6fd; cursor: pointer; margin-bottom: 14px; }
+  .flashcard .fc-question { font-size: 1.08rem; font-weight: 700; color: #0c4a6e; line-height: 1.5; }
+  .flashcard .fc-answer { font-size: .94rem; color: #0369a1; line-height: 1.6; margin-top: 12px; padding-top: 12px; border-top: 2px dashed #7dd3fc; display: none; }
+  .flashcard.revealed .fc-answer { display: block; }
+  .fc-controls { display: flex; justify-content: center; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .fc-counter { background: #e0f2fe; padding: 8px 20px; border-radius: 40px; font-weight: 700; color: #0369a1; border: 2px solid #7dd3fc; }
+  
+  .quiz-question { background: #f0f9ff; border-radius: 18px; padding: 18px; margin-bottom: 12px; border: 2px solid #bae6fd; }
+  .quiz-question h4 { color: #0c4a6e; font-size: .98rem; margin-bottom: 12px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 7px; }
+  .quiz-opt { background: #fff; border: 2px solid #bae6fd; border-radius: 12px; padding: 11px 14px; cursor: pointer; font-weight: 600; color: #1e3a5f; text-align: left; font-family: inherit; font-size: .85rem; display: flex; align-items: center; gap: 10px; }
+  .quiz-opt:hover { border-color: #7dd3fc; background: #f0f9ff; }
+  .quiz-opt.correct { background: #dcfce7; border-color: #16a34a; color: #14532d; }
+  .quiz-opt.wrong { background: #fee2e2; border-color: #dc2626; color: #7f1d1d; }
+  .quiz-opt .letter { background: #e0f2fe; color: #0369a1; width: 24px; height: 24px; line-height: 24px; text-align: center; border-radius: 50%; font-weight: 800; flex-shrink: 0; font-size: .76rem; }
+  .quiz-opt.correct .letter { background: #16a34a; color: #fff; }
+  .quiz-opt.wrong .letter { background: #dc2626; color: #fff; }
+  .quiz-feedback { margin-top: 12px; padding: 12px; border-radius: 12px; font-size: .85rem; line-height: 1.6; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: #dcfce7; color: #14532d; border-left: 5px solid #16a34a; }
+  .quiz-feedback.no { background: #fee2e2; color: #7f1d1d; border-left: 5px solid #dc2626; }
+  
+  .formula-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 12px; }
+  .formula-card { background: #fff; border-radius: 18px; padding: 14px 16px; border: 2px solid #bae6fd; box-shadow: 0 4px 0 #bae6fd; }
+  .formula-card h4 { color: #0369a1; font-size: .94rem; margin-bottom: 8px; }
+  .formula-card .f { background: #f0f9ff; padding: 10px 12px; border-radius: 12px; font-family: 'Cambria Math','Georgia',serif; color: #0c4a6e; margin-bottom: 8px; font-size: .9rem; text-align: center; font-weight: 700; }
+  .formula-card p { font-size: .78rem; color: #0e7490; line-height: 1.5; }
+  
+  @media (max-width: 600px) {
+    .panel { padding: 18px 12px; }
+    .je-row, .je-header { grid-template-columns: 1fr; }
+    .je-header { display: none; }
+    .tools-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>📒 Nguyên Lý Kế Toán — Giúp Bé Thư 📒</h1>
+    <div class="subtitle">10 chương · Mẹo nhớ có ví dụ · Bài tập mẫu · 16 công cụ tính toán 🌾</div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="overview">🏠 Tổng quan</button>
+    <button class="tab-btn" data-tab="c1">C1</button>
+    <button class="tab-btn" data-tab="c2">C2</button>
+    <button class="tab-btn" data-tab="c3">C3</button>
+    <button class="tab-btn" data-tab="c4">C4</button>
+    <button class="tab-btn" data-tab="c5">C5</button>
+    <button class="tab-btn" data-tab="c6">C6</button>
+    <button class="tab-btn" data-tab="c7">C7</button>
+    <button class="tab-btn" data-tab="c8">C8</button>
+    <button class="tab-btn" data-tab="c9">C9</button>
+    <button class="tab-btn" data-tab="c10">C10</button>
+    <button class="tab-btn tools-tab" data-tab="tools">🧰 Công cụ (16)</button>
+    <button class="tab-btn" data-tab="quiz">🎯 Trắc nghiệm</button>
+    <button class="tab-btn" data-tab="flashcard">🎴 Flashcard</button>
+    <button class="tab-btn" data-tab="formulas">📚 Công thức</button>
+  </div>
+
+  <!-- TỔNG QUAN -->
+  <div class="panel active" id="panel-overview">
+    <h2>🏠 Chào mừng!</h2>
+    <div class="desc">Bộ công cụ học Nguyên lý Kế toán cho sinh viên <strong>Kinh tế Nông nghiệp</strong>. Mỗi chương có lý thuyết, mẹo nhớ có ví dụ, bài tập mẫu. Tab <strong>🧰 Công cụ</strong> có 16 công cụ chia 6 nhóm.</div>
+    <div class="section-title">📚 10 chương — Nhấn để vào học</div>
+    <div class="chapter-list">
+      <div class="chapter-item" data-goto="c1"><span class="num">1</span><span class="title">Bản chất & Vai trò</span><div class="sub">Khái niệm, phân loại, 7 nguyên tắc</div></div>
+      <div class="chapter-item" data-goto="c2"><span class="num">2</span><span class="title">Đối tượng kế toán</span><div class="sub">Tài sản, nguồn vốn, phương trình</div></div>
+      <div class="chapter-item" data-goto="c3"><span class="num">3</span><span class="title">Phương pháp kế toán</span><div class="sub">Chứng từ, đối ứng, tính giá</div></div>
+      <div class="chapter-item" data-goto="c4"><span class="num">4</span><span class="title">Tài khoản kế toán</span><div class="sub">Kết cấu, phân loại</div></div>
+      <div class="chapter-item" data-goto="c5"><span class="num">5</span><span class="title">Ghi sổ kép</span><div class="sub">Định khoản, tổng hợp & chi tiết</div></div>
+      <div class="chapter-item" data-goto="c6"><span class="num">6</span><span class="title">Chứng từ kế toán</span><div class="sub">7 yếu tố, luân chuyển</div></div>
+      <div class="chapter-item" data-goto="c7"><span class="num">7</span><span class="title">Sổ kế toán</span><div class="sub">Hình thức ghi sổ</div></div>
+      <div class="chapter-item" data-goto="c8"><span class="num">8</span><span class="title">Báo cáo tài chính</span><div class="sub">CĐKT, KQKD, LCTT</div></div>
+      <div class="chapter-item" data-goto="c9"><span class="num">9</span><span class="title">Kiểm kê tài sản</span><div class="sub">Xử lý chênh lệch</div></div>
+      <div class="chapter-item" data-goto="c10"><span class="num">10</span><span class="title">Kế toán Nông nghiệp</span><div class="sub">Đặc thù cây trồng, vật nuôi</div></div>
+    </div>
+    <div class="section-title">🧰 16 công cụ — 6 nhóm</div>
+    <div class="chapter-list">
+      <div class="chapter-item" data-goto="tools" data-sub="basic"><span class="num">📐</span><span class="title">Cơ bản (3)</span><div class="sub">Phương trình · Số dư · Nguyên giá</div></div>
+      <div class="chapter-item" data-goto="tools" data-sub="journal"><span class="num">📝</span><span class="title">Bút toán (2)</span><div class="sub">Kiểm tra · Định khoản mẫu</div></div>
+      <div class="chapter-item" data-goto="tools" data-sub="report"><span class="num">📊</span><span class="title">Báo cáo (2)</span><div class="sub">KQKD · Chỉ số TC</div></div>
+      <div class="chapter-item" data-goto="tools" data-sub="inventory"><span class="num">🔍</span><span class="title">Kiểm kê (2)</span><div class="sub">Chênh lệch · Dự phòng HTK</div></div>
+      <div class="chapter-item" data-goto="tools" data-sub="agri"><span class="num">🌾</span><span class="title">Nông nghiệp (4)</span><div class="sub">Giá thành · KH · TSCĐ SH · Chia lãi</div></div>
+      <div class="chapter-item" data-goto="tools" data-sub="finance"><span class="num">💰</span><span class="title">Tài chính (3)</span><div class="sub">Lãi vay · Chiết khấu · Cỡ mẫu</div></div>
+    </div>
+  </div>
+
+  <!-- C1 -->
+  <div class="panel" id="panel-c1">
+    <h2><span class="chapter-badge">CHƯƠNG 1</span> Bản chất & Vai trò của kế toán</h2>
+    <div class="desc">Kế toán là <strong>hệ thống thông tin và kiểm tra</strong> về tình hình tài sản, nguồn hình thành tài sản và kết quả hoạt động kinh doanh.</div>
+    <div class="section-title">📖 Lý thuyết trọng tâm</div>
+    <div class="theory-box">
+      <strong>Khái niệm:</strong> Kế toán là quá trình thu thập, xử lý, ghi chép, tổng hợp, phân tích và cung cấp thông tin kinh tế - tài chính.<br><br>
+      <strong>Phân loại:</strong> KT tài chính (hướng ngoại) · KT quản trị (hướng nội) · KT thuế, ngân hàng, nông nghiệp.<br><br>
+      <strong>7 nguyên tắc:</strong> Cơ sở dồn tích · Hoạt động liên tục · Giá gốc · Nhất quán · Thận trọng · Trọng yếu · Phù hợp.
+    </div>
+    <div class="section-title">💡 Mẹo nhớ kèm ví dụ</div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 1</span>
+      <span class="tip-title">7 nguyên tắc — câu thần chú</span>
+      <div class="tip-card" style="padding:0;background:transparent;border:none;margin:0;">"Cơ — Hoạt — Giá — Nhất — Thận — Trọng — Phù"</div>
+      <div class="tip-example">HTX bán 10 tấn lúa ngày 20/12, thu tiền 05/01 năm sau. Theo cơ sở dồn tích, doanh thu ghi vào năm nay.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 2</span>
+      <span class="tip-title">KT tài chính vs KT quản trị</span>
+      <div class="tip-example">BCTC gửi thuế → KT tài chính. Báo cáo CP từng hecta lúa cho giám đốc HTX → KT quản trị.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 3</span>
+      <span class="tip-title">Nguyên tắc thận trọng</span>
+      <div class="tip-example">Đàn bò bán được 500tr, sổ chỉ ghi 400tr (giá gốc). Dự phòng rủi ro phải trích đầy đủ.</div>
+    </div>
+    <div class="section-title">✏️ Bài tập mẫu</div>
+    <div class="exercise-card">
+      <div><span class="ex-badge">BÀI TẬP 1.1</span><span class="ex-title">Nhận diện nguyên tắc</span></div>
+      <div class="ex-question">HTX mua máy sấy giá 200tr. Giá thị trường 250tr. Kế toán ghi bao nhiêu?</div>
+      <button class="ex-solution-btn" data-exercise>👁 Xem lời giải</button>
+      <div class="ex-solution">
+        <strong>Ghi 200 triệu.</strong> Theo nguyên tắc <em>giá gốc</em>.<br><br>
+        Nợ TK 211: 200.000.000<br>
+        Có TK 112/331: 200.000.000
+      </div>
+    </div>
+  </div>
+
+  <!-- C2 -->
+  <div class="panel" id="panel-c2">
+    <h2><span class="chapter-badge">CHƯƠNG 2</span> Đối tượng của kế toán</h2>
+    <div class="desc">Đối tượng là <strong>tài sản và nguồn hình thành tài sản</strong>, cùng sự vận động của chúng.</div>
+    <div class="section-title">📖 Lý thuyết trọng tâm</div>
+    <div class="theory-box">
+      <strong>Tài sản:</strong> TSNH (&lt;12 tháng) · TSDH (&gt;12 tháng).<br><br>
+      <strong>Nguồn vốn:</strong> Nợ phải trả · Vốn CSH.<br><br>
+      <strong>Phương trình:</strong> TÀI SẢN = NỢ + VỐN CSH.<br><br>
+      <strong>4 loại nghiệp vụ:</strong> TS↑NV↑ · TS↑TS↓ · TS↓NV↓ · NV↑NV↓.
+    </div>
+    <div class="section-title">💡 Mẹo nhớ kèm ví dụ</div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 1</span>
+      <span class="tip-title">"Tài sản thì Nợ"</span>
+      <div class="tip-example">Mua bò 100tr trả tiền mặt: Nợ TK 215 (bò tăng) / Có TK 111 (tiền giảm).</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 2</span>
+      <span class="tip-title">TSNH vs TSDH</span>
+      <div class="tip-example">Đàn heo thịt (4-6 tháng) → TSNH (TK 154). Đàn heo nái (nhiều năm) → TSDH (TK 215).</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 3</span>
+      <span class="tip-title">4 loại nghiệp vụ không mất cân bằng</span>
+      <div class="tip-example">1. Mua phân bón 50tr chưa trả (TS↑NV↑) · 2. Rút tiền mua cây giống (TS↑TS↓) · 3. Trả nợ NH (TS↓NV↓) · 4. Vay NH trả nợ NCC (NV↑NV↓).</div>
+    </div>
+    <div class="section-title">✏️ Bài tập mẫu</div>
+    <div class="exercise-card">
+      <div><span class="ex-badge">BÀI TẬP 2.1</span><span class="ex-title">Phân tích nghiệp vụ</span></div>
+      <div class="ex-question">HTX có TS = 2 tỷ, NV = 2 tỷ. Mua phân bón 100tr chưa trả. Phương trình thay đổi?</div>
+      <button class="ex-solution-btn" data-exercise>👁 Xem lời giải</button>
+      <div class="ex-solution">
+        Loại 1: TS↑NV↑. Sau NV: TS = 2.1 tỷ, NV = 2.1 tỷ → vẫn cân bằng ✅<br><br>
+        Nợ TK 152: 100tr / Có TK 331: 100tr
+      </div>
+    </div>
+  </div>
+
+  <!-- C3 -->
+  <div class="panel" id="panel-c3">
+    <h2><span class="chapter-badge">CHƯƠNG 3</span> Phương pháp kế toán</h2>
+    <div class="desc"><strong>4 phương pháp</strong>: Chứng từ · Đối ứng · Tính giá · Tổng hợp.</div>
+    <div class="section-title">📖 Lý thuyết trọng tâm</div>
+    <div class="theory-box">
+      <strong>1. Chứng từ:</strong> Mọi NV phải có chứng từ hợp lệ.<br>
+      <strong>2. Đối ứng:</strong> Ghi kép, tổng Nợ = tổng Có.<br>
+      <strong>3. Tính giá:</strong> NG = Giá + Vận chuyển + Lắp + Thuế (không hoàn) + Khác.<br>
+      <strong>4. Tổng hợp:</strong> Bảng cân đối, TS = NV.
+    </div>
+    <div class="section-title">💡 Mẹo nhớ kèm ví dụ</div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 1</span>
+      <span class="tip-title">4 phương pháp = 4 bước</span>
+      <div class="tip-example">Mua máy cày: (1) HĐ [Chứng] → (2) Nợ 211/Có 331 [Đối] → (3) NG 515tr [Tính] → (4) Lên bảng CĐKT [Tổng].</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 2</span>
+      <span class="tip-title">Nguyên giá — 5 phần</span>
+      <div class="tip-example">Máy cày: 500 + 10 + 3 + 0 + 2 = 515tr.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 3</span>
+      <span class="tip-title">CP TRƯỚC vs SAU khi dùng</span>
+      <div class="tip-example">Máy 500 + vận chuyển 10 = 510 (NG). Sửa máy 5tr → CP (TK 627).</div>
+    </div>
+    <div class="section-title">✏️ Bài tập mẫu</div>
+    <div class="exercise-card">
+      <div><span class="ex-badge">BÀI TẬP 3.1</span><span class="ex-title">Tính nguyên giá</span></div>
+      <div class="ex-question">Máy gặt: giá 800tr + vận chuyển 20tr + lắp đặt 15tr + thuế không hoàn 10tr. Sửa 5tr sau 1 tháng. NG?</div>
+      <button class="ex-solution-btn" data-exercise>👁 Xem lời giải</button>
+      <div class="ex-solution">
+        <strong>NG = 800 + 20 + 15 + 10 = 845 triệu</strong><br>
+        Loại trừ 5tr sửa chữa (tính vào TK 627).<br><br>
+        Nợ TK 211: 845.000.000<br>
+        Có TK 331/112: 845.000.000
+      </div>
+    </div>
+  </div>
+
+  <!-- C4 -->
+  <div class="panel" id="panel-c4">
+    <h2><span class="chapter-badge">CHƯƠNG 4</span> Tài khoản kế toán</h2>
+    <div class="desc">TK là <strong>phương tiện phản ánh và giám sát</strong> từng loại tài sản, nguồn vốn.</div>
+    <div class="section-title">📖 Lý thuyết trọng tâm</div>
+    <div class="theory-box">
+      <strong>Kết cấu:</strong> Bên Nợ (trái) — Bên Có (phải).<br><br>
+      • TS (1xx,2xx): SDĐK Nợ, tăng Nợ, giảm Có<br>
+      • NV (3xx,4xx): SDĐK Có, tăng Có, giảm Nợ<br>
+      • DT (5xx,7xx): không SDĐK, tăng Có<br>
+      • CP (6xx,8xx): không SDĐK, tăng Nợ<br><br>
+      <strong>SDCK:</strong> SDĐK + PS tăng − PS giảm.
+    </div>
+    <div class="section-title">💡 Mẹo nhớ kèm ví dụ</div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 1</span>
+      <span class="tip-title">5 loại TK qua số đầu</span>
+      <div class="tip-example">TK 111: số 1 → TS. TK 331: số 3 → Nợ. TK 511: số 5 → DT.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 2</span>
+      <span class="tip-title">SDCK cùng bên SDĐK</span>
+      <div class="tip-example">TK 111: SDĐK Nợ 100tr, PS Nợ 50tr, PS Có 30tr → SDCK Nợ 120tr.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 3</span>
+      <span class="tip-title">TK lưỡng tính</span>
+      <div class="tip-example">Bán 100tr, KH trả trước 30tr → TK 131 dư Nợ 70tr. Nếu KH trả 150tr → TK 131 dư Có 50tr.</div>
+    </div>
+    <div class="section-title">✏️ Bài tập mẫu</div>
+    <div class="exercise-card">
+      <div><span class="ex-badge">BÀI TẬP 4.1</span><span class="ex-title">Tính số dư cuối kỳ</span></div>
+      <div class="ex-question">TK 111: SDĐK Nợ 50tr. PS Nợ 200tr, PS Có 180tr. SDCK?</div>
+      <button class="ex-solution-btn" data-exercise>👁 Xem lời giải</button>
+      <div class="ex-solution">
+        <strong>SDCK = 50 + 200 − 180 = 70 triệu (Nợ)</strong><br>
+        TK tài sản → SD cả 2 bên Nợ.
+      </div>
+    </div>
+  </div>
+
+  <!-- C5 -->
+  <div class="panel" id="panel-c5">
+    <h2><span class="chapter-badge">CHƯƠNG 5</span> Ghi sổ kép — Định khoản</h2>
+    <div class="desc">Mỗi NV ghi <strong>ít nhất 2 TK</strong>, tổng Nợ = tổng Có.</div>
+    <div class="section-title">📖 Lý thuyết trọng tâm</div>
+    <div class="theory-box">
+      <strong>Nguyên tắc:</strong> Mỗi NV ≥1 Nợ, ≥1 Có. Tổng Nợ = Tổng Có.<br><br>
+      <strong>Phân loại:</strong> Giản đơn (1-1) · Phức tạp (1-n, n-1) · Đặc biệt (n-n).
+    </div>
+    <div class="section-title">💡 Mẹo nhớ kèm ví dụ</div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 1</span>
+      <span class="tip-title">"Nợ trước Có sau"</span>
+      <div class="tip-example">Bán lúa 100tr: Nợ 111 100tr / Có 511 100tr.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 2</span>
+      <span class="tip-title">Nhận diện TK tăng/giảm</span>
+      <div class="tip-example">Mua phân bón 50tr chưa trả: Nợ 152 (TS tăng) / Có 331 (NV tăng).</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 3</span>
+      <span class="tip-title">4 bước định khoản</span>
+      <div class="tip-example">Vay NH 500tr trả nợ NCC: Nợ 331: 500tr / Có 341: 500tr.</div>
+    </div>
+    <div class="section-title">✏️ Bài tập mẫu</div>
+    <div class="exercise-card">
+      <div><span class="ex-badge">BÀI TẬP 5.1</span><span class="ex-title">Định khoản</span></div>
+      <div class="ex-question">(a) Mua phân bón 30tr trả tiền. (b) Bán 5 tấn lúa thu 60tr. (c) Trả lương 20tr. (d) Rút NH nhập quỹ 100tr.</div>
+      <button class="ex-solution-btn" data-exercise>👁 Xem lời giải</button>
+      <div class="ex-solution">
+        (a) Nợ 152: 30tr / Có 111: 30tr<br>
+        (b) Nợ 111: 60tr / Có 511: 60tr<br>
+        (c) Nợ 642: 20tr / Có 111: 20tr<br>
+        (d) Nợ 111: 100tr / Có 112: 100tr
+      </div>
+    </div>
+  </div>
+
+  <!-- C6 -->
+  <div class="panel" id="panel-c6">
+    <h2><span class="chapter-badge">CHƯƠNG 6</span> Chứng từ kế toán</h2>
+    <div class="desc">Chứng từ là <strong>vật mang thông tin</strong> chứng minh NV đã phát sinh.</div>
+    <div class="section-title">📖 Lý thuyết trọng tâm</div>
+    <div class="theory-box">
+      <strong>7 yếu tố:</strong> Tên · Ngày · Số · ĐVị · Nội dung · Tiền · Ký.<br><br>
+      <strong>Trình tự:</strong> Lập → Kiểm tra → Ghi sổ → Bảo quản → Lưu trữ.<br><br>
+      <strong>Lưu trữ:</strong> Tối thiểu 10 năm.
+    </div>
+    <div class="section-title">💡 Mẹo nhớ kèm ví dụ</div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 1</span>
+      <span class="tip-title">7 yếu tố — "Tên Ngày Số Đơn Nội Tiền Ký"</span>
+      <div class="tip-example">HĐ mua phân bón: (1) HĐ GTGT, (2) 15/3/N, (3) 0012345, (4) HTX A, (5) 5 tấn phân bón, (6) 30tr, (7) chữ ký.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 2</span>
+      <span class="tip-title">Chứng từ gốc vs tổng hợp</span>
+      <div class="tip-example">10 phiếu thu → 1 Bảng kê phiếu thu.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 3</span>
+      <span class="tip-title">Kiểm soát nội bộ</span>
+      <div class="tip-example">Phiếu chi cần: thủ quỹ lập, KT trưởng duyệt, GĐ ký — người lập ≠ người duyệt ≠ người chi.</div>
+    </div>
+  </div>
+
+  <!-- C7 -->
+  <div class="panel" id="panel-c7">
+    <h2><span class="chapter-badge">CHƯƠNG 7</span> Sổ kế toán</h2>
+    <div class="desc">Sổ kế toán <strong>ghi chép, hệ thống hóa</strong> thông tin từ chứng từ.</div>
+    <div class="section-title">📖 Lý thuyết trọng tâm</div>
+    <div class="theory-box">
+      <strong>Loại sổ:</strong> Nhật ký · Sổ Cái · Sổ chi tiết · Sổ kết hợp.<br><br>
+      <strong>Hình thức:</strong> NK-Sổ Cái · Chứng từ ghi sổ · NK chung · NK chứng từ.
+    </div>
+    <div class="section-title">💡 Mẹo nhớ kèm ví dụ</div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 1</span>
+      <span class="tip-title">3 hình thức chính</span>
+      <div class="tip-example">HTX nhỏ → NK chung. Công ty lớn → NK chứng từ.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 2</span>
+      <span class="tip-title">Quy trình NK chung</span>
+      <div class="tip-example">Chứng từ gốc → NKC → Sổ Cái → Bảng CĐSP → BCTC.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 3</span>
+      <span class="tip-title">Sổ Cái vs Sổ chi tiết</span>
+      <div class="tip-example">Sổ Cái 152 tổng 200tr = Sổ chi tiết (phân bón 80 + thuốc 60 + giống 60).</div>
+    </div>
+  </div>
+
+  <!-- C8 -->
+  <div class="panel" id="panel-c8">
+    <h2><span class="chapter-badge">CHƯƠNG 8</span> Báo cáo tài chính</h2>
+    <div class="desc">BCTC <strong>tổng hợp</strong> tình hình tài sản, nguồn vốn, KQKD, lưu chuyển tiền tệ.</div>
+    <div class="section-title">📖 Lý thuyết trọng tâm</div>
+    <div class="theory-box">
+      <strong>4 BCTC:</strong> Bảng CĐKT · BC KQKD · BC LCTT · Thuyết minh BCTC.<br><br>
+      <strong>LN:</strong> DT − CP.
+    </div>
+    <div class="section-title">💡 Mẹo nhớ kèm ví dụ</div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 1</span>
+      <span class="tip-title">4 báo cáo — "Cân đối · Kết quả · Lưu chuyển · Thuyết minh"</span>
+      <div class="tip-example">CĐKT "đứng yên" 31/12. KQKD "chạy" cả năm.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 2</span>
+      <span class="tip-title">CĐKT vs KQKD</span>
+      <div class="tip-example">CĐKT = ảnh chụp (1 thời điểm). KQKD = video (cả kỳ).</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 3</span>
+      <span class="tip-title">Ai dùng BCTC?</span>
+      <div class="tip-example">HTX gửi BCTC cho: thuế, NH, Liên minh HTX, xã viên, cơ quan thống kê.</div>
+    </div>
+    <div class="section-title">✏️ Bài tập mẫu</div>
+    <div class="exercise-card">
+      <div><span class="ex-badge">BÀI TẬP 8.1</span><span class="ex-title">Lập BC KQKD</span></div>
+      <div class="ex-question">DT bán lúa 500tr + bán rơm 50tr. Giá vốn 300tr. CP bán hàng 30tr, QLDN 50tr. Thuế 20%. LN sau thuế?</div>
+      <button class="ex-solution-btn" data-exercise>👁 Xem lời giải</button>
+      <div class="ex-solution">
+        Tổng DT = 550tr. LN gộp = 250tr.<br>
+        LN trước thuế = 250 − 30 − 50 = 170tr.<br>
+        Thuế = 34tr. <strong>LN sau thuế = 136 triệu.</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- C9 -->
+  <div class="panel" id="panel-c9">
+    <h2><span class="chapter-badge">CHƯƠNG 9</span> Kiểm kê tài sản</h2>
+    <div class="desc">Kiểm kê là <strong>cân đong, đo đếm thực tế</strong> tài sản, so sánh với sổ sách.</div>
+    <div class="section-title">📖 Lý thuyết trọng tâm</div>
+    <div class="theory-box">
+      • Thừa → TK 3381 (chờ xử lý)<br>
+      • Thiếu → TK 1381 (chờ xử lý)
+    </div>
+    <div class="section-title">💡 Mẹo nhớ kèm ví dụ</div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 1</span>
+      <span class="tip-title">"Thừa 3381 — Thiếu 1381"</span>
+      <div class="tip-example">Kho lúa sổ 1000 tấn, thực 980 → thiếu 20 tấn. Nợ 1381 / Có 152.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 2</span>
+      <span class="tip-title">Xử lý sau kiểm kê</span>
+      <div class="tip-example">Thiếu do bão → Nợ 811 / Có 1381. Thiếu do tham ô → Nợ 1388 / Có 1381.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 3</span>
+      <span class="tip-title">Khi nào kiểm kê nông nghiệp?</span>
+      <div class="tip-example">Sau thu hoạch, trước xuống giống, cuối vụ.</div>
+    </div>
+    <div class="section-title">✏️ Bài tập mẫu</div>
+    <div class="exercise-card">
+      <div><span class="ex-badge">BÀI TẬP 9.1</span><span class="ex-title">Xử lý kiểm kê kho lúa</span></div>
+      <div class="ex-question">Sổ 200 tấn, thực 195 tấn. Đơn giá 6.000đ/kg. (a) ĐK khi phát hiện? (b) Sau đó xác định do bão.</div>
+      <button class="ex-solution-btn" data-exercise>👁 Xem lời giải</button>
+      <div class="ex-solution">
+        Thiếu 5 tấn = 5.000 kg × 6.000 = <strong>30 triệu</strong>.<br><br>
+        <strong>(a)</strong> Nợ TK 1381: 30tr / Có TK 155: 30tr<br>
+        <strong>(b)</strong> Nợ TK 811: 30tr / Có TK 1381: 30tr
+      </div>
+    </div>
+  </div>
+
+  <!-- C10 -->
+  <div class="panel" id="panel-c10">
+    <h2><span class="chapter-badge">CHƯƠNG 10</span> Kế toán Nông nghiệp</h2>
+    <div class="desc">Đặc thù: <strong>mùa vụ · tài sản sinh học · chi phí dở dang dài · rủi ro thiên tai</strong>.</div>
+    <div class="section-title">📖 Lý thuyết trọng tâm</div>
+    <div class="theory-box">
+      <strong>TK đặc thù:</strong> 154 (CP dở dang) · 215 (TSCĐ sinh học) · 611 (mua hàng nông sản).<br><br>
+      <strong>Giá thành:</strong> Tổng CP / Sản lượng.
+    </div>
+    <div class="section-title">💡 Mẹo nhớ kèm ví dụ</div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 1</span>
+      <span class="tip-title">4 đặc thù — "Mùa vụ · Sinh học · Dở dang · Rủi ro"</span>
+      <div class="tip-example">Lúa Đông Xuân: CP tập trung 4 tháng, cây sinh trưởng, CP dở dang suốt vụ, bão lũ đe dọa.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 2</span>
+      <span class="tip-title">TK 154 vs 215</span>
+      <div class="tip-example">Vườn cà phê 5 năm → 215. Cà phê mới trồng 6 tháng → 154.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-label">MẸO 3</span>
+      <span class="tip-title">Giá thành qua 3 bước</span>
+      <div class="tip-example">1 ha lúa: 3+8+2+15+2+1 = 31tr. Thu 6 tấn → 5.167 đ/kg.</div>
+    </div>
+    <div class="section-title">✏️ Bài tập mẫu</div>
+    <div class="exercise-card">
+      <div><span class="ex-badge">BÀI TẬP 10.1</span><span class="ex-title">Tính giá thành và lợi nhuận</span></div>
+      <div class="ex-question">2 ha lúa: giống 6tr, phân bón 16tr, thuốc 4tr, công 30tr, khấu hao 4tr, khác 2tr. SL 12 tấn. Giá bán 7.500đ/kg.</div>
+      <button class="ex-solution-btn" data-exercise>👁 Xem lời giải</button>
+      <div class="ex-solution">
+        Tổng CP = 6+16+4+30+4+2 = <strong>62 triệu</strong><br>
+        Giá thành = 62tr / 12.000kg = <strong>5.167 đ/kg</strong><br>
+        DT = 12.000 × 7.500 = 90tr<br>
+        <strong>LN = 90 − 62 = 28 triệu</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="panel" id="panel-tools">
+    <h2>🧰 Công cụ tính toán kế toán</h2>
+    <div class="desc">16 công cụ chia thành 6 nhóm. Chọn nhóm bên dưới.</div>
+
+    <div class="sub-tabs">
+      <button class="sub-tab active" data-sub="basic">📐 Cơ bản (3)</button>
+      <button class="sub-tab" data-sub="journal">📝 Bút toán (2)</button>
+      <button class="sub-tab" data-sub="report">📊 Báo cáo (2)</button>
+      <button class="sub-tab" data-sub="inventory">🔍 Kiểm kê (2)</button>
+      <button class="sub-tab" data-sub="agri">🌾 Nông nghiệp (4)</button>
+      <button class="sub-tab" data-sub="finance">💰 Tài chính (3)</button>
+    </div>
+
+    <!-- BASIC -->
+    <div class="sub-panel active" id="sub-basic">
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">⚖️</div><div><div class="tool-title">Phương trình kế toán</div><div class="tool-desc">TS = Nợ + VCSH</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Tài sản (TS)</label><input type="number" id="t1-assets" value="500000000" step="1000000"></div>
+            <div class="field"><label>Nợ phải trả</label><input type="number" id="t1-liab" value="200000000" step="1000000"></div>
+            <div class="field"><label>Vốn CSH</label><input type="number" id="t1-equity" value="300000000" step="1000000"></div>
+          </div>
+          <button class="tool-btn" data-tool="checkEquation">⚖️ Kiểm tra</button>
+          <div class="tool-result" id="t1-result"></div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">📊</div><div><div class="tool-title">Số dư cuối kỳ</div><div class="tool-desc">SDCK = SDĐK + PS tăng − PS giảm</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Loại TK</label>
+              <select id="t2-type">
+                <option value="asset">Tài sản</option>
+                <option value="liab">Nợ phải trả</option>
+                <option value="equity">Vốn CSH</option>
+                <option value="revenue">Doanh thu</option>
+                <option value="expense">Chi phí</option>
+              </select>
+            </div>
+            <div class="field"><label>Số dư đầu kỳ</label><input type="number" id="t2-sddk" value="100000000" step="1000000"></div>
+            <div class="field"><label>PS bên Nợ</label><input type="number" id="t2-psn" value="50000000" step="1000000"></div>
+            <div class="field"><label>PS bên Có</label><input type="number" id="t2-psc" value="30000000" step="1000000"></div>
+          </div>
+          <button class="tool-btn" data-tool="soDuCuoiKy">📊 Tính</button>
+          <div class="tool-result" id="t2-result"></div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">💰</div><div><div class="tool-title">Nguyên giá TSCĐ</div><div class="tool-desc">Giá + Vận + Lắp + Thuế + Khác</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Giá mua</label><input type="number" id="t3-price" value="100000000" step="1000000"></div>
+            <div class="field"><label>Vận chuyển</label><input type="number" id="t3-ship" value="5000000" step="500000"></div>
+            <div class="field"><label>Lắp đặt</label><input type="number" id="t3-install" value="3000000" step="500000"></div>
+            <div class="field"><label>Thuế không hoàn (%)</label><input type="number" id="t3-vat" value="0" step="0.1"></div>
+            <div class="field"><label>Chi phí khác</label><input type="number" id="t3-other" value="2000000" step="500000"></div>
+          </div>
+          <button class="tool-btn" data-tool="nguyenGia">💰 Tính</button>
+          <div class="tool-result" id="t3-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="sub-panel" id="sub-journal">
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">✅</div><div><div class="tool-title">Kiểm tra bút toán</div><div class="tool-desc">Tổng Nợ = Tổng Có</div></div></div>
+          <div id="t4-container">
+            <div class="je-header"><span>Diễn giải</span><span>Nợ</span><span>Có</span></div>
+            <div class="je-row">
+              <input type="text" placeholder="Diễn giải" value="Mua phân bón">
+              <input type="number" value="30000000" step="100000">
+              <input type="number" value="0" step="100000">
+            </div>
+            <div class="je-row">
+              <input type="text" placeholder="Diễn giải" value="Tiền mặt giảm">
+              <input type="number" value="0" step="100000">
+              <input type="number" value="30000000" step="100000">
+            </div>
+          </div>
+          <div class="btn-row" style="margin:10px 0;">
+            <button class="btn btn-secondary" style="padding:8px 14px;font-size:.78rem;" data-tool="addJERow">➕ Thêm</button>
+            <button class="btn btn-secondary" style="padding:8px 14px;font-size:.78rem;" data-tool="clearJE">🔄 Xóa</button>
+          </div>
+          <button class="tool-btn" data-tool="checkJournal">✅ Kiểm tra</button>
+          <div class="tool-result" id="t4-result"></div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">📖</div><div><div class="tool-title">Định khoản mẫu</div><div class="tool-desc">Chọn nghiệp vụ — xem định khoản</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Nghiệp vụ</label>
+              <select id="t5-case">
+                <option value="mua-nvl-tra-tien">Mua NVL trả tiền</option>
+                <option value="mua-nvl-chua-tra">Mua NVL chưa trả</option>
+                <option value="ban-hang-thu-tien">Bán hàng thu tiền</option>
+                <option value="ban-hang-chua-thu">Bán hàng chưa thu</option>
+                <option value="tra-luong">Trả lương CN</option>
+                <option value="vay-ngan-hang">Vay ngân hàng</option>
+                <option value="tra-no-ncc">Trả nợ NCC</option>
+                <option value="rut-tien-nh">Rút tiền NH nhập quỹ</option>
+                <option value="mua-tscd">Mua TSCĐ</option>
+                <option value="xuat-kho-ban">Xuất kho bán hàng</option>
+                <option value="thue-tndn">Nộp thuế TNDN</option>
+                <option value="chia-lai-htx">Chia lãi xã viên</option>
+              </select>
+            </div>
+            <div class="field"><label>Số tiền (VND)</label><input type="number" id="t5-amount" value="50000000" step="1000000"></div>
+          </div>
+          <button class="tool-btn" data-tool="dinhKhoanMau">📖 Xem định khoản</button>
+          <div class="tool-result" id="t5-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT -->
+    <div class="sub-panel" id="sub-report">
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">📈</div><div><div class="tool-title">Lập BC KQKD</div><div class="tool-desc">Tính lợi nhuận 5 bước</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Doanh thu bán hàng</label><input type="number" id="t6-rev" value="500000000" step="1000000"></div>
+            <div class="field"><label>Doanh thu khác</label><input type="number" id="t6-rev-other" value="50000000" step="1000000"></div>
+            <div class="field"><label>Giá vốn hàng bán</label><input type="number" id="t6-cogs" value="300000000" step="1000000"></div>
+            <div class="field"><label>CP bán hàng</label><input type="number" id="t6-selling" value="30000000" step="1000000"></div>
+            <div class="field"><label>CP QLDN</label><input type="number" id="t6-admin" value="50000000" step="1000000"></div>
+            <div class="field"><label>Thuế TNDN (%)</label><input type="number" id="t6-tax" value="20" step="1"></div>
+          </div>
+          <button class="tool-btn" data-tool="bcKQKD">📈 Lập báo cáo</button>
+          <div class="tool-result" id="t6-result"></div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">📊</div><div><div class="tool-title">Chỉ số tài chính</div><div class="tool-desc">Thanh toán · Sinh lời · Cấu trúc</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>TSNH</label><input type="number" id="t7-ca" value="400000000" step="1000000"></div>
+            <div class="field"><label>Nợ ngắn hạn</label><input type="number" id="t7-cl" value="200000000" step="1000000"></div>
+            <div class="field"><label>Hàng tồn kho</label><input type="number" id="t7-inv" value="100000000" step="1000000"></div>
+            <div class="field"><label>Tổng tài sản</label><input type="number" id="t7-ta" value="800000000" step="1000000"></div>
+            <div class="field"><label>Tổng nợ</label><input type="number" id="t7-tl" value="300000000" step="1000000"></div>
+            <div class="field"><label>Vốn CSH</label><input type="number" id="t7-eq" value="500000000" step="1000000"></div>
+            <div class="field"><label>Doanh thu</label><input type="number" id="t7-rev" value="600000000" step="1000000"></div>
+            <div class="field"><label>LN sau thuế</label><input type="number" id="t7-profit" value="80000000" step="1000000"></div>
+          </div>
+          <button class="tool-btn" data-tool="chiSoTC">📊 Phân tích</button>
+          <div class="tool-result" id="t7-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVENTORY -->
+    <div class="sub-panel" id="sub-inventory">
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">🔍</div><div><div class="tool-title">Xử lý chênh lệch kiểm kê</div><div class="tool-desc">Thừa → 3381 · Thiếu → 1381</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Số lượng sổ sách</label><input type="number" id="t8-book" value="1000" step="1"></div>
+            <div class="field"><label>Số lượng thực tế</label><input type="number" id="t8-actual" value="980" step="1"></div>
+            <div class="field"><label>Đơn giá (VND)</label><input type="number" id="t8-price" value="50000" step="1000"></div>
+          </div>
+          <button class="tool-btn" data-tool="kiemKe">🔍 Xử lý</button>
+          <div class="tool-result" id="t8-result"></div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">📉</div><div><div class="tool-title">Dự phòng giảm giá HTK</div><div class="tool-desc">Theo TT 200</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Số lượng tồn kho</label><input type="number" id="t9-qty" value="1000" step="1"></div>
+            <div class="field"><label>Giá gốc (đ/đv)</label><input type="number" id="t9-cost" value="50000" step="1000"></div>
+            <div class="field"><label>Giá trị thuần (NRV)</label><input type="number" id="t9-nrv" value="45000" step="1000"></div>
+            <div class="field"><label>Dự phòng đã lập</label><input type="number" id="t9-old" value="0" step="100000"></div>
+          </div>
+          <button class="tool-btn" data-tool="duPhong">📉 Tính</button>
+          <div class="tool-result" id="t9-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGRI -->
+    <div class="sub-panel" id="sub-agri">
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">🌾</div><div><div class="tool-title">Giá thành nông sản</div><div class="tool-desc">Tổng CP / Sản lượng</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Loại</label>
+              <select id="t10-type">
+                <option value="cay">🌾 Cây trồng</option>
+                <option value="vat">🐄 Vật nuôi</option>
+              </select>
+            </div>
+            <div class="field"><label>Chi phí NVL</label><input type="number" id="t10-nvl" value="30000000" step="1000000"></div>
+            <div class="field"><label>Chi phí nhân công</label><input type="number" id="t10-nc" value="20000000" step="1000000"></div>
+            <div class="field"><label>Chi phí CCDC</label><input type="number" id="t10-ccdc" value="5000000" step="500000"></div>
+            <div class="field"><label>Chi phí khấu hao</label><input type="number" id="t10-kh" value="8000000" step="500000"></div>
+            <div class="field"><label>Chi phí khác</label><input type="number" id="t10-khac" value="3000000" step="500000"></div>
+            <div class="field"><label>Sản lượng (kg)</label><input type="number" id="t10-sl" value="1000" step="10"></div>
+            <div class="field"><label>Giá bán (đ/kg)</label><input type="number" id="t10-gia" value="7000" step="100"></div>
+          </div>
+          <button class="tool-btn" data-tool="giaThanh">🌾 Tính giá thành</button>
+          <div class="tool-result" id="t10-result"></div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">📉</div><div><div class="tool-title">Khấu hao đường thẳng</div><div class="tool-desc">(NG − GT hồi) / n</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Nguyên giá TSCĐ</label><input type="number" id="t11-cost" value="500000000" step="1000000"></div>
+            <div class="field"><label>Giá trị thải hồi</label><input type="number" id="t11-salvage" value="50000000" step="1000000"></div>
+            <div class="field"><label>Thời gian (năm)</label><input type="number" id="t11-years" value="10" step="1"></div>
+            <div class="field"><label>Đã dùng (năm)</label><input type="number" id="t11-used" value="3" step="1"></div>
+          </div>
+          <button class="tool-btn" data-tool="khauHao">📉 Tính khấu hao</button>
+          <div class="tool-result" id="t11-result"></div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">🌳</div><div><div class="tool-title">Đánh giá TSCĐ sinh học</div><div class="tool-desc">Giá gốc vs giá thị trường</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Loại</label>
+              <select id="t12-type">
+                <option value="cay">🌳 Vườn cây lâu năm</option>
+                <option value="vat">🐄 Đàn gia súc</option>
+              </select>
+            </div>
+            <div class="field"><label>Số lượng</label><input type="number" id="t12-qty" value="100" step="1"></div>
+            <div class="field"><label>Giá gốc (đ/đv)</label><input type="number" id="t12-cost" value="5000000" step="100000"></div>
+            <div class="field"><label>Giá thị trường (đ/đv)</label><input type="number" id="t12-market" value="6000000" step="100000"></div>
+          </div>
+          <button class="tool-btn" data-tool="tscdSinhHoc">🌳 Đánh giá</button>
+          <div class="tool-result" id="t12-result"></div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">🤝</div><div><div class="tool-title">Chia lãi cho xã viên HTX</div><div class="tool-desc">Theo vốn góp + trích quỹ</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Tổng LN sau thuế</label><input type="number" id="t13-profit" value="200000000" step="1000000"></div>
+            <div class="field"><label>Trích quỹ (%)</label><input type="number" id="t13-fund" value="10" step="1"></div>
+            <div class="field"><label>Vốn góp A</label><input type="number" id="t13-a" value="300000000" step="1000000"></div>
+            <div class="field"><label>Vốn góp B</label><input type="number" id="t13-b" value="200000000" step="1000000"></div>
+            <div class="field"><label>Vốn góp C</label><input type="number" id="t13-c" value="500000000" step="1000000"></div>
+          </div>
+          <button class="tool-btn" data-tool="chiaLai">🤝 Chia lãi</button>
+          <div class="tool-result" id="t13-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCE -->
+    <div class="sub-panel" id="sub-finance">
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">💵</div><div><div class="tool-title">Tính lãi vay</div><div class="tool-desc">Lãi đơn & lãi ghép</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Số tiền vay</label><input type="number" id="t14-p" value="1000000000" step="10000000"></div>
+            <div class="field"><label>Lãi suất (%/năm)</label><input type="number" id="t14-r" value="10" step="0.1"></div>
+            <div class="field"><label>Số năm</label><input type="number" id="t14-t" value="3" step="1"></div>
+            <div class="field"><label>Loại lãi</label>
+              <select id="t14-type">
+                <option value="simple">Lãi đơn</option>
+                <option value="compound">Lãi ghép (kép)</option>
+              </select>
+            </div>
+          </div>
+          <button class="tool-btn" data-tool="laiVay">💵 Tính lãi</button>
+          <div class="tool-result" id="t14-result"></div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">🏷️</div><div><div class="tool-title">Chiết khấu thanh toán</div><div class="tool-desc">Tiền được hưởng khi trả sớm</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Giá trị hóa đơn</label><input type="number" id="t15-invoice" value="200000000" step="1000000"></div>
+            <div class="field"><label>Tỷ lệ CK (%)</label><input type="number" id="t15-rate" value="2" step="0.1"></div>
+            <div class="field"><label>Thuế GTGT (%)</label><input type="number" id="t15-vat" value="10" step="1"></div>
+          </div>
+          <button class="tool-btn" data-tool="chietKhau">🏷️ Tính</button>
+          <div class="tool-result" id="t15-result"></div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-header"><div class="tool-icon">📏</div><div><div class="tool-title">Cỡ mẫu kiểm toán</div><div class="tool-desc">Xác định n cần kiểm tra</div></div></div>
+          <div class="tool-form">
+            <div class="field"><label>Độ tin cậy (%)</label>
+              <select id="t16-conf">
+                <option value="90">90%</option>
+                <option value="95" selected>95%</option>
+                <option value="99">99%</option>
+              </select>
+            </div>
+            <div class="field"><label>Sai số cho phép (đ)</label><input type="number" id="t16-e" value="10000000" step="1000000"></div>
+            <div class="field"><label>Độ lệch chuẩn σ</label><input type="number" id="t16-sd" value="50000000" step="1000000"></div>
+            <div class="field"><label>Tổng thể N</label><input type="number" id="t16-N" value="1000" step="10"></div>
+          </div>
+          <button class="tool-btn" data-tool="coMau">📏 Tính cỡ mẫu</button>
+          <div class="tool-result" id="t16-result"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="panel" id="panel-quiz">
+    <h2>🎯 Trắc nghiệm 10 chương</h2>
+    <div class="desc">15 câu hỏi tổng hợp.</div>
+    <div id="quiz-container"></div>
+    <div class="btn-row" style="margin-top:16px;">
+      <button class="btn btn-primary" data-tool="resetQuiz">🔄 Làm lại</button>
+      <span class="fc-counter" id="quiz-score">Đúng: 0/15</span>
+    </div>
+  </div>
+
+  <!-- FLASHCARD -->
+  <div class="panel" id="panel-flashcard">
+    <h2>🎴 Flashcard ghi nhớ</h2>
+    <div class="desc">25 thẻ bao quát 10 chương.</div>
+    <div class="flashcard" id="flashcard" data-tool="toggleFlashcard">
+      <div class="fc-question" id="fc-q">Nhấn để bắt đầu</div>
+      <div class="fc-answer" id="fc-a"></div>
+    </div>
+    <div class="fc-controls">
+      <button class="btn btn-secondary" data-tool="prevCard">◀ Trước</button>
+      <div class="fc-counter" id="fc-counter">1 / 25</div>
+      <button class="btn btn-primary" data-tool="nextCard">Sau ▶</button>
+    </div>
+  </div>
+
+  <!-- FORMULAS -->
+  <div class="panel" id="panel-formulas">
+    <h2>📚 Sổ tay công thức</h2>
+    <div class="desc">Công thức quan trọng có ví dụ.</div>
+    <div class="formula-grid">
+      <div class="formula-card"><h4>⚖️ Phương trình KT</h4><div class="f">TS = Nợ + VCSH</div><p><strong>VD:</strong> 500 = 200 + 300</p></div>
+      <div class="formula-card"><h4>💰 Nguyên giá TSCĐ</h4><div class="f">NG = Giá + Vận + Lắp + Thuế + Khác</div><p><strong>VD:</strong> 500+10+3+0+2 = 515</p></div>
+      <div class="formula-card"><h4>📊 SDCK</h4><div class="f">SDĐK + PS tăng − PS giảm</div><p><strong>VD:</strong> 100+50−30 = 120</p></div>
+      <div class="formula-card"><h4>📝 Ghi sổ kép</h4><div class="f">Tổng Nợ = Tổng Có</div><p><strong>VD:</strong> Nợ 152 50 / Có 331 50</p></div>
+      <div class="formula-card"><h4>📄 7 yếu tố CT</h4><div class="f">Tên · Ngày · Số · ĐV · ND · Tiền · Ký</div><p>HĐ mua phân bón có đủ 7</p></div>
+      <div class="formula-card"><h4>📈 Lợi nhuận</h4><div class="f">LN = DT − CP</div><p><strong>VD:</strong> 550−380 = 170</p></div>
+      <div class="formula-card"><h4>🔍 Kiểm kê</h4><div class="f">Thừa 3381 · Thiếu 1381</div><p><strong>VD:</strong> Thiếu 5×6000 = 30tr</p></div>
+      <div class="formula-card"><h4>🌾 Giá thành</h4><div class="f">Tổng CP / Sản lượng</div><p><strong>VD:</strong> 62tr/12.000 = 5.167đ</p></div>
+      <div class="formula-card"><h4>💧 Thanh toán NH</h4><div class="f">TSNH / Nợ ngắn hạn</div><p><strong>VD:</strong> 400/200 = 2.0</p></div>
+      <div class="formula-card"><h4>💵 ROA</h4><div class="f">LN sau thuế / Tổng TS</div><p><strong>VD:</strong> 80/800 = 10%</p></div>
+      <div class="formula-card"><h4>🏦 ROE</h4><div class="f">LN sau thuế / VCSH</div><p><strong>VD:</strong> 80/500 = 16%</p></div>
+      <div class="formula-card"><h4>📉 Khấu hao</h4><div class="f">(NG − GT hồi) / n</div><p><strong>VD:</strong> (500−50)/10 = 45tr</p></div>
+    </div>
+  </div>
+
+  <div class="note" style="text-align:center;color:#0369a1;font-size:.85rem;margin-top:18px;padding:12px;background:#f0f9ff;border-radius:20px;border:1px dashed #7dd3fc;">
+    🌾 Chúc em học tốt Nguyên lý Kế toán — Kinh tế Nông nghiệp! 🌾
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   EVENT DELEGATION — 1 listener duy nhất cho toàn trang
+   Cách này ĐẢM BẢO tab hoạt động dù có bao nhiêu element
+   ============================================================ */
+document.addEventListener('click', function(e) {
+
+  /* 1. TAB CHÍNH */
+  const tabBtn = e.target.closest('.tab-btn');
+  if (tabBtn && tabBtn.dataset.tab) {
+    e.preventDefault();
+    const tabName = tabBtn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tabBtn.classList.add('active');
+    const panel = document.getElementById('panel-' + tabName);
+    if (panel) panel.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  /* 2. SUB-TAB trong tab Công cụ */
+  const subBtn = e.target.closest('.sub-tab');
+  if (subBtn && subBtn.dataset.sub) {
+    e.preventDefault();
+    const subName = subBtn.dataset.sub;
+    document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+    subBtn.classList.add('active');
+    const subPanel = document.getElementById('sub-' + subName);
+    if (subPanel) subPanel.classList.add('active');
+    return;
+  }
+
+  /* 3. CHAPTER-ITEM (điều hướng nhanh) */
+  const chapItem = e.target.closest('.chapter-item');
+  if (chapItem && chapItem.dataset.goto) {
+    e.preventDefault();
+    const goto = chapItem.dataset.goto;
+    const sub = chapItem.dataset.sub;
+    // switch tab
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    const tabBtnEl = document.querySelector('.tab-btn[data-tab="' + goto + '"]');
+    if (tabBtnEl) tabBtnEl.classList.add('active');
+    const panel = document.getElementById('panel-' + goto);
+    if (panel) panel.classList.add('active');
+    // nếu có sub tab, mở sub tab đó
+    if (sub) {
+      setTimeout(function() {
+        document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+        const subBtnEl = document.querySelector('.sub-tab[data-sub="' + sub + '"]');
+        if (subBtnEl) subBtnEl.classList.add('active');
+        const subPanel = document.getElementById('sub-' + sub);
+        if (subPanel) subPanel.classList.add('active');
+      }, 50);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  /* 4. EXERCISE SOLUTION TOGGLE */
+  const exBtn = e.target.closest('[data-exercise]');
+  if (exBtn) {
+    e.preventDefault();
+    const sol = exBtn.nextElementSibling;
+    if (sol && sol.classList.contains('ex-solution')) {
+      sol.classList.toggle('show');
+      exBtn.textContent = sol.classList.contains('show') ? '🙈 Ẩn lời giải' : '👁 Xem lời giải';
+    }
+    return;
+  }
+
+  /* 5. TOOL BUTTON (data-tool) */
+  const toolBtn = e.target.closest('[data-tool]');
+  if (toolBtn && toolBtn.dataset.tool) {
+    e.preventDefault();
+    const toolName = toolBtn.dataset.tool;
+    const fn = window['tool_' + toolName] || window[toolName];
+    if (typeof fn === 'function') {
+      fn();
+    } else {
+      console.warn('Tool không tồn tại:', toolName);
+    }
+    return;
+  }
+});
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+function fmtVND(n) {
+  if (!isFinite(n)) return '—';
+  return Math.round(n).toLocaleString('vi-VN') + ' đ';
+}
+function showToolResult(id, html) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = html;
+  el.classList.add('show');
+}
+function getVal(id) {
+  const el = document.getElementById(id);
+  return el ? (+el.value || 0) : 0;
+}
+function getStr(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+/* ============================================================
+   TOOLS FUNCTIONS (gắn vào window để gọi qua data-tool)
+   ============================================================ */
+window.checkEquation = function() {
+  const A = getVal('t1-assets'), L = getVal('t1-liab'), E = getVal('t1-equity');
+  const right = L + E, diff = A - right;
+  const ok = Math.abs(diff) < 1;
+  showToolResult('t1-result',
+    '<div class="big-num">' + (ok ? '✅ CÂN BẰNG' : '❌ LỆCH ' + fmtVND(Math.abs(diff))) + '</div>' +
+    '<div class="row"><span>TS</span><span class="val">' + fmtVND(A) + '</span></div>' +
+    '<div class="row"><span>Nợ</span><span class="val">' + fmtVND(L) + '</span></div>' +
+    '<div class="row"><span>VCSH</span><span class="val">' + fmtVND(E) + '</span></div>' +
+    '<div class="row"><span>Nguồn vốn</span><span class="val">' + fmtVND(right) + '</span></div>' +
+    '<div class="row"><span>Chênh lệch</span><span class="val ' + (ok ? 'ok' : 'err') + '">' + fmtVND(diff) + '</span></div>'
+  );
+};
+
+window.soDuCuoiKy = function() {
+  const type = getStr('t2-type'), sddk = getVal('t2-sddk'), psn = getVal('t2-psn'), psc = getVal('t2-psc');
+  let name = '', sdckNo = 0, sdckCo = 0, sdDisplay = '';
+  if (type === 'asset') { name = 'Tài sản'; sdckNo = sddk + psn - psc; }
+  else if (type === 'liab') { name = 'Nợ phải trả'; sdckCo = sddk + psc - psn; }
+  else if (type === 'equity') { name = 'Vốn CSH'; sdckCo = sddk + psc - psn; }
+  else if (type === 'revenue') { name = 'Doanh thu'; sdckCo = psc - psn; }
+  else { name = 'Chi phí'; sdckNo = psn - psc; }
+  sdDisplay = sdckNo ? fmtVND(sdckNo) + ' (Nợ)' : fmtVND(sdckCo) + ' (Có)';
+  showToolResult('t2-result',
+    '<div class="big-num">' + sdDisplay + '</div>' +
+    '<div class="row"><span>Loại TK</span><span class="val">' + name + '</span></div>' +
+    '<div class="row"><span>SD đầu kỳ</span><span class="val">' + fmtVND(sddk) + '</span></div>' +
+    '<div class="row"><span>PS Nợ</span><span class="val">' + fmtVND(psn) + '</span></div>' +
+    '<div class="row"><span>PS Có</span><span class="val">' + fmtVND(psc) + '</span></div>'
+  );
+};
+
+window.nguyenGia = function() {
+  const price = getVal('t3-price'), ship = getVal('t3-ship'), install = getVal('t3-install');
+  const vat = getVal('t3-vat'), other = getVal('t3-other');
+  const vatAmt = price * vat / 100;
+  const total = price + ship + install + vatAmt + other;
+  showToolResult('t3-result',
+    '<div class="big-num">' + fmtVND(total) + '</div>' +
+    '<div class="row"><span>Giá mua</span><span class="val">' + fmtVND(price) + '</span></div>' +
+    '<div class="row"><span>Vận chuyển</span><span class="val">' + fmtVND(ship) + '</span></div>' +
+    '<div class="row"><span>Lắp đặt</span><span class="val">' + fmtVND(install) + '</span></div>' +
+    '<div class="row"><span>Thuế (không hoàn)</span><span class="val">' + fmtVND(vatAmt) + '</span></div>' +
+    '<div class="row"><span>Khác</span><span class="val">' + fmtVND(other) + '</span></div>' +
+    '<div class="def-khoan"><strong>ĐK:</strong> Nợ TK 211: ' + fmtVND(total) + ' / Có TK 111/112/331: ' + fmtVND(total) + '</div>'
+  );
+};
+
+window.addJERow = function() {
+  const container = document.getElementById('t4-container');
+  if (!container) return;
+  const row = document.createElement('div');
+  row.className = 'je-row';
+  row.innerHTML = '<input type="text" placeholder="Diễn giải"><input type="number" value="0" step="100000"><input type="number" value="0" step="100000">';
+  container.appendChild(row);
+};
+
+window.clearJE = function() {
+  const container = document.getElementById('t4-container');
+  if (!container) return;
+  container.innerHTML = '<div class="je-header"><span>Diễn giải</span><span>Nợ</span><span>Có</span></div>' +
+    '<div class="je-row"><input type="text" placeholder="Diễn giải"><input type="number" value="0" step="100000"><input type="number" value="0" step="100000"></div>';
+  const r = document.getElementById('t4-result');
+  if (r) r.classList.remove('show');
+};
+
+window.checkJournal = function() {
+  const container = document.getElementById('t4-container');
+  if (!container) return;
+  const rows = container.querySelectorAll('.je-row');
+  let totalD = 0, totalC = 0, detail = '';
+  rows.forEach(function(row, i) {
+    const inputs = row.querySelectorAll('input');
+    const desc = inputs[0].value || ('Dòng ' + (i+1));
+    const d = +inputs[1].value || 0, c = +inputs[2].value || 0;
+    totalD += d; totalC += c;
+    detail += '<div class="row"><span>' + desc + '</span><span class="val">Nợ: ' + (d ? fmtVND(d) : '—') + ' · Có: ' + (c ? fmtVND(c) : '—') + '</span></div>';
+  });
+  const ok = Math.abs(totalD - totalC) < 1;
+  showToolResult('t4-result',
+    '<div class="big-num">' + (ok ? '✅ HỢP LỆ' : '❌ LỆCH ' + fmtVND(totalD - totalC)) + '</div>' +
+    detail +
+    '<div class="row"><span><strong>Tổng Nợ</strong></span><span class="val">' + fmtVND(totalD) + '</span></div>' +
+    '<div class="row"><span><strong>Tổng Có</strong></span><span class="val">' + fmtVND(totalC) + '</span></div>'
+  );
+};
+
+window.dinhKhoanMau = function() {
+  const c = getStr('t5-case'), amt = getVal('t5-amount');
+  const cases = {
+    'mua-nvl-tra-tien': { d: 'Mua NVL trả tiền mặt', e: [['Nợ TK 152 (Nguyên liệu)', amt], ['Có TK 111 (Tiền mặt)', amt]] },
+    'mua-nvl-chua-tra': { d: 'Mua NVL chưa trả tiền', e: [['Nợ TK 152 (Nguyên liệu)', amt], ['Có TK 331 (Phải trả NB)', amt]] },
+    'ban-hang-thu-tien': { d: 'Bán hàng thu tiền mặt', e: [['Nợ TK 111 (Tiền mặt)', amt], ['Có TK 511 (Doanh thu)', amt]] },
+    'ban-hang-chua-thu': { d: 'Bán hàng chưa thu tiền', e: [['Nợ TK 131 (Phải thu KH)', amt], ['Có TK 511 (Doanh thu)', amt]] },
+    'tra-luong': { d: 'Trả lương nhân công', e: [['Nợ TK 642 (CP QLDN)', amt], ['Có TK 111 (Tiền mặt)', amt]] },
+    'vay-ngan-hang': { d: 'Vay ngân hàng', e: [['Nợ TK 112 (Tiền gửi NH)', amt], ['Có TK 341 (Vay dài hạn)', amt]] },
+    'tra-no-ncc': { d: 'Trả nợ nhà cung cấp', e: [['Nợ TK 331 (Phải trả NB)', amt], ['Có TK 111 (Tiền mặt)', amt]] },
+    'rut-tien-nh': { d: 'Rút tiền NH nhập quỹ', e: [['Nợ TK 111 (Tiền mặt)', amt], ['Có TK 112 (Tiền gửi NH)', amt]] },
+    'mua-tscd': { d: 'Mua TSCĐ', e: [['Nợ TK 211 (TSCĐ hữu hình)', amt], ['Có TK 111 (Tiền mặt)', amt]] },
+    'xuat-kho-ban': { d: 'Xuất kho bán hàng', e: [['Nợ TK 632 (Giá vốn)', amt], ['Có TK 155 (Thành phẩm)', amt]] },
+    'thue-tndn': { d: 'Nộp thuế TNDN', e: [['Nợ TK 3334 (Thuế TNDN)', amt], ['Có TK 112 (Tiền gửi NH)', amt]] },
+    'chia-lai-htx': { d: 'Chia lãi cho xã viên', e: [['Nợ TK 421 (LN chưa PP)', amt], ['Có TK 111 (Tiền mặt)', amt]] }
+  };
+  const item = cases[c];
+  if (!item) return;
+  let eHtml = '';
+  item.e.forEach(function(en) {
+    eHtml += '<div class="row"><span>' + en[0] + '</span><span class="val">' + fmtVND(en[1]) + '</span></div>';
+  });
+  showToolResult('t5-result',
+    '<div class="big-num" style="font-size:1rem;">' + item.d + '</div>' +
+    eHtml +
+    '<div class="def-khoan">Tổng Nợ = Tổng Có = ' + fmtVND(amt) + ' ✅</div>'
+  );
+};
+
+window.bcKQKD = function() {
+  const rev = getVal('t6-rev'), revO = getVal('t6-rev-other'), cogs = getVal('t6-cogs');
+  const selling = getVal('t6-selling'), admin = getVal('t6-admin'), taxPct = getVal('t6-tax');
+  const totalRev = rev + revO;
+  const gross = totalRev - cogs;
+  const pbt = gross - selling - admin;
+  const tax = pbt * taxPct / 100;
+  const net = pbt - tax;
+  showToolResult('t6-result',
+    '<div class="big-num">' + fmtVND(net) + '<br><span style="font-size:.75rem;color:#0369a1;">LỢI NHUẬN SAU THUẾ</span></div>' +
+    '<div class="row"><span>Tổng DT</span><span class="val">' + fmtVND(totalRev) + '</span></div>' +
+    '<div class="row"><span>Giá vốn</span><span class="val">−' + fmtVND(cogs) + '</span></div>' +
+    '<div class="row"><span><strong>LN gộp</strong></span><span class="val">' + fmtVND(gross) + '</span></div>' +
+    '<div class="row"><span>CP bán hàng</span><span class="val">−' + fmtVND(selling) + '</span></div>' +
+    '<div class="row"><span>CP QLDN</span><span class="val">−' + fmtVND(admin) + '</span></div>' +
+    '<div class="row"><span><strong>LN trước thuế</strong></span><span class="val">' + fmtVND(pbt) + '</span></div>' +
+    '<div class="row"><span>Thuế (' + taxPct + '%)</span><span class="val">−' + fmtVND(tax) + '</span></div>' +
+    '<div class="row"><span><strong>LN sau thuế</strong></span><span class="val ok">' + fmtVND(net) + '</span></div>'
+  );
+};
+
+window.chiSoTC = function() {
+  const ca = getVal('t7-ca'), cl = getVal('t7-cl') || 1, inv = getVal('t7-inv');
+  const ta = getVal('t7-ta') || 1, tl = getVal('t7-tl'), eq = getVal('t7-eq') || 1;
+  const rev = getVal('t7-rev') || 1, profit = getVal('t7-profit');
+  const cr = ca / cl, qr = (ca - inv) / cl, dr = tl / ta, de = tl / eq;
+  const roa = profit / ta * 100, roe = profit / eq * 100, nm = profit / rev * 100;
+  showToolResult('t7-result',
+    '<div class="big-num">ROA ' + roa.toFixed(2) + '% · ROE ' + roe.toFixed(2) + '%</div>' +
+    '<div class="row"><span>Thanh toán NH</span><span class="val">' + cr.toFixed(2) + ' ' + (cr >= 2 ? '✅' : cr >= 1 ? '⚠️' : '❌') + '</span></div>' +
+    '<div class="row"><span>Thanh toán nhanh</span><span class="val">' + qr.toFixed(2) + ' ' + (qr >= 1 ? '✅' : '❌') + '</span></div>' +
+    '<div class="row"><span>Nợ / TS</span><span class="val">' + dr.toFixed(3) + ' ' + (dr <= 0.5 ? '✅' : '⚠️') + '</span></div>' +
+    '<div class="row"><span>D/E</span><span class="val">' + de.toFixed(3) + '</span></div>' +
+    '<div class="row"><span>ROA</span><span class="val">' + roa.toFixed(2) + '%</span></div>' +
+    '<div class="row"><span>ROE</span><span class="val">' + roe.toFixed(2) + '%</span></div>' +
+    '<div class="row"><span>Biên LN ròng</span><span class="val">' + nm.toFixed(2) + '%</span></div>'
+  );
+};
+
+window.kiemKe = function() {
+  const book = getVal('t8-book'), actual = getVal('t8-actual'), price = getVal('t8-price');
+  const diff = actual - book, absDiff = Math.abs(diff), value = absDiff * price;
+  let title = diff === 0 ? '✅ KHỚP' : diff > 0 ? '⚠️ THỪA ' + absDiff : '❌ THIẾU ' + absDiff;
+  let html = '<div class="big-num">' + title + '</div>' +
+    '<div class="row"><span>Sổ sách</span><span class="val">' + book + '</span></div>' +
+    '<div class="row"><span>Thực tế</span><span class="val">' + actual + '</span></div>' +
+    '<div class="row"><span>Đơn giá</span><span class="val">' + fmtVND(price) + '</span></div>' +
+    '<div class="row"><span>Giá trị CL</span><span class="val">' + fmtVND(value) + '</span></div>';
+  if (diff > 0) {
+    html += '<div class="def-khoan"><strong>ĐK THỪA:</strong><br>Nợ TK 152/155/156: ' + fmtVND(value) + '<br>Có TK 3381: ' + fmtVND(value) + '</div>';
+  } else if (diff < 0) {
+    html += '<div class="def-khoan"><strong>ĐK THIẾU:</strong><br>Nợ TK 1381: ' + fmtVND(value) + '<br>Có TK 152/155/156: ' + fmtVND(value) + '</div>';
+  }
+  showToolResult('t8-result', html);
+};
+
+window.duPhong = function() {
+  const qty = getVal('t9-qty'), cost = getVal('t9-cost'), nrv = getVal('t9-nrv'), old = getVal('t9-old');
+  const totalCost = qty * cost, totalNrv = qty * nrv;
+  const needed = Math.max(0, totalCost - totalNrv);
+  const diff = needed - old;
+  let html = '<div class="big-num">' + fmtVND(needed) + '<br><span style="font-size:.72rem;color:#0369a1;">DỰ PHÒNG CẦN LẬP</span></div>' +
+    '<div class="row"><span>Giá gốc HTK</span><span class="val">' + fmtVND(totalCost) + '</span></div>' +
+    '<div class="row"><span>Giá trị thuần</span><span class="val">' + fmtVND(totalNrv) + '</span></div>' +
+    '<div class="row"><span>Đã lập</span><span class="val">' + fmtVND(old) + '</span></div>' +
+    '<div class="row"><span>Chênh lệch</span><span class="val ' + (diff >= 0 ? 'err' : 'ok') + '">' + fmtVND(diff) + '</span></div>';
+  if (diff > 0) {
+    html += '<div class="def-khoan"><strong>Trích thêm:</strong><br>Nợ TK 632: ' + fmtVND(diff) + '<br>Có TK 2294: ' + fmtVND(diff) + '</div>';
+  } else if (diff < 0) {
+    html += '<div class="def-khoan"><strong>Hoàn nhập:</strong><br>Nợ TK 2294: ' + fmtVND(-diff) + '<br>Có TK 632: ' + fmtVND(-diff) + '</div>';
+  }
+  showToolResult('t9-result', html);
+};
+
+window.giaThanh = function() {
+  const nvl = getVal('t10-nvl'), nc = getVal('t10-nc'), ccdc = getVal('t10-ccdc');
+  const kh = getVal('t10-kh'), khac = getVal('t10-khac');
+  const sl = getVal('t10-sl') || 1, gia = getVal('t10-gia');
+  const total = nvl + nc + ccdc + kh + khac;
+  const unit = total / sl;
+  const rev = sl * gia;
+  const profit = rev - total;
+  const margin = rev > 0 ? (profit / rev * 100) : 0;
+  showToolResult('t10-result',
+    '<div class="big-num">' + Math.round(unit).toLocaleString('vi-VN') + ' đ/kg</div>' +
+    '<div class="row"><span>NVL</span><span class="val">' + fmtVND(nvl) + '</span></div>' +
+    '<div class="row"><span>Nhân công</span><span class="val">' + fmtVND(nc) + '</span></div>' +
+    '<div class="row"><span>CCDC</span><span class="val">' + fmtVND(ccdc) + '</span></div>' +
+    '<div class="row"><span>Khấu hao</span><span class="val">' + fmtVND(kh) + '</span></div>' +
+    '<div class="row"><span>Khác</span><span class="val">' + fmtVND(khac) + '</span></div>' +
+    '<div class="row"><span><strong>Tổng CP</strong></span><span class="val">' + fmtVND(total) + '</span></div>' +
+    '<div class="row"><span>Doanh thu</span><span class="val">' + fmtVND(rev) + '</span></div>' +
+    '<div class="row"><span><strong>Lợi nhuận</strong></span><span class="val ' + (profit >= 0 ? 'ok' : 'err') + '">' + fmtVND(profit) + '</span></div>' +
+    '<div class="row"><span>Biên LN</span><span class="val">' + margin.toFixed(2) + '%</span></div>'
+  );
+};
+
+window.khauHao = function() {
+  const cost = getVal('t11-cost'), salvage = getVal('t11-salvage');
+  const years = getVal('t11-years') || 1, used = getVal('t11-used');
+  const annual = (cost - salvage) / years;
+  const monthly = annual / 12;
+  const accumulated = annual * used;
+  const remaining = cost - accumulated;
+  showToolResult('t11-result',
+    '<div class="big-num">' + fmtVND(annual) + '/năm</div>' +
+    '<div class="row"><span>Nguyên giá</span><span class="val">' + fmtVND(cost) + '</span></div>' +
+    '<div class="row"><span>GT thải hồi</span><span class="val">' + fmtVND(salvage) + '</span></div>' +
+    '<div class="row"><span>Thời gian</span><span class="val">' + years + ' năm</span></div>' +
+    '<div class="row"><span>KH tháng</span><span class="val">' + fmtVND(monthly) + '</span></div>' +
+    '<div class="row"><span>Đã KH (' + used + ' năm)</span><span class="val">' + fmtVND(accumulated) + '</span></div>' +
+    '<div class="row"><span>GT còn lại</span><span class="val">' + fmtVND(remaining) + '</span></div>' +
+    '<div class="def-khoan"><strong>ĐK hàng tháng:</strong><br>Nợ TK 627/642: ' + fmtVND(monthly) + '<br>Có TK 214: ' + fmtVND(monthly) + '</div>'
+  );
+};
+
+window.tscdSinhHoc = function() {
+  const type = getStr('t12-type'), qty = getVal('t12-qty');
+  const cost = getVal('t12-cost'), market = getVal('t12-market');
+  const totalCost = qty * cost, totalMarket = qty * market, diff = totalMarket - totalCost;
+  const tName = type === 'cay' ? '🌳 Vườn cây lâu năm' : '🐄 Đàn gia súc';
+  showToolResult('t12-result',
+    '<div class="big-num">' + fmtVND(totalCost) + '<br><span style="font-size:.72rem;color:#0369a1;">GIÁ TRỊ GHI SỔ (giá gốc)</span></div>' +
+    '<div class="row"><span>Loại</span><span class="val">' + tName + '</span></div>' +
+    '<div class="row"><span>Số lượng</span><span class="val">' + qty + '</span></div>' +
+    '<div class="row"><span>Giá gốc</span><span class="val">' + fmtVND(totalCost) + '</span></div>' +
+    '<div class="row"><span>Giá thị trường</span><span class="val">' + fmtVND(totalMarket) + '</span></div>' +
+    '<div class="row"><span>Chênh lệch</span><span class="val">' + fmtVND(diff) + '</span></div>' +
+    '<div class="def-khoan"><strong>Theo VAS:</strong> Ghi theo giá gốc<br>Nợ TK 215: ' + fmtVND(totalCost) + '<br>Có TK 111/112/331: ' + fmtVND(totalCost) + '</div>'
+  );
+};
+
+window.chiaLai = function() {
+  const profit = getVal('t13-profit'), fundPct = getVal('t13-fund');
+  const a = getVal('t13-a'), b = getVal('t13-b'), c = getVal('t13-c');
+  const totalCap = a + b + c;
+  if (totalCap <= 0) { showToolResult('t13-result', '<div class="big-num err">Vốn góp phải > 0</div>'); return; }
+  const fund = profit * fundPct / 100;
+  const distributable = profit - fund;
+  const shareA = distributable * a / totalCap;
+  const shareB = distributable * b / totalCap;
+  const shareC = distributable * c / totalCap;
+  showToolResult('t13-result',
+    '<div class="big-num">' + fmtVND(distributable) + '<br><span style="font-size:.72rem;color:#0369a1;">LN CHIA XÃ VIÊN</span></div>' +
+    '<div class="row"><span>Tổng LN</span><span class="val">' + fmtVND(profit) + '</span></div>' +
+    '<div class="row"><span>Trích quỹ (' + fundPct + '%)</span><span class="val">−' + fmtVND(fund) + '</span></div>' +
+    '<div class="row"><span>Tổng vốn góp</span><span class="val">' + fmtVND(totalCap) + '</span></div>' +
+    '<div class="row"><span>Xã viên A (' + (a/totalCap*100).toFixed(1) + '%)</span><span class="val">' + fmtVND(shareA) + '</span></div>' +
+    '<div class="row"><span>Xã viên B (' + (b/totalCap*100).toFixed(1) + '%)</span><span class="val">' + fmtVND(shareB) + '</span></div>' +
+    '<div class="row"><span>Xã viên C (' + (c/totalCap*100).toFixed(1) + '%)</span><span class="val">' + fmtVND(shareC) + '</span></div>'
+  );
+};
+
+window.laiVay = function() {
+  const p = getVal('t14-p'), r = getVal('t14-r'), t = getVal('t14-t'), type = getStr('t14-type');
+  let interest, total;
+  if (type === 'simple') {
+    interest = p * r / 100 * t;
+    total = p + interest;
+  } else {
+    total = p * Math.pow(1 + r / 100, t);
+    interest = total - p;
+  }
+  const tName = type === 'simple' ? 'Lãi đơn' : 'Lãi ghép (kép)';
+  showToolResult('t14-result',
+    '<div class="big-num">' + fmtVND(interest) + '<br><span style="font-size:.72rem;color:#0369a1;">TIỀN LÃI</span></div>' +
+    '<div class="row"><span>Loại</span><span class="val">' + tName + '</span></div>' +
+    '<div class="row"><span>Số tiền vay</span><span class="val">' + fmtVND(p) + '</span></div>' +
+    '<div class="row"><span>Lãi suất</span><span class="val">' + r + '%/năm</span></div>' +
+    '<div class="row"><span>Thời gian</span><span class="val">' + t + ' năm</span></div>' +
+    '<div class="row"><span>Tổng phải trả</span><span class="val">' + fmtVND(total) + '</span></div>'
+  );
+};
+
+window.chietKhau = function() {
+  const inv = getVal('t15-invoice'), rate = getVal('t15-rate'), vat = getVal('t15-vat');
+  const ck = inv * rate / 100;
+  const vatAmt = (inv - ck) * vat / 100;
+  const payable = inv - ck + vatAmt;
+  showToolResult('t15-result',
+    '<div class="big-num">' + fmtVND(ck) + '<br><span style="font-size:.72rem;color:#0369a1;">TIỀN CHIẾT KHẤU</span></div>' +
+    '<div class="row"><span>Giá trị HĐ</span><span class="val">' + fmtVND(inv) + '</span></div>' +
+    '<div class="row"><span>Tỷ lệ CK</span><span class="val">' + rate + '%</span></div>' +
+    '<div class="row"><span>Chiết khấu</span><span class="val ok">−' + fmtVND(ck) + '</span></div>' +
+    '<div class="row"><span>VAT sau CK</span><span class="val">' + fmtVND(vatAmt) + '</span></div>' +
+    '<div class="row"><span><strong>Tổng phải trả</strong></span><span class="val">' + fmtVND(payable) + '</span></div>'
+  );
+};
+
+window.coMau = function() {
+  const conf = +getStr('t16-conf'), e = getVal('t16-e'), sd = getVal('t16-sd'), N = getVal('t16-N');
+  const zMap = { 90: 1.645, 95: 1.96, 99: 2.576 };
+  const z = zMap[conf] || 1.96;
+  const n0 = Math.pow(z * sd / e, 2);
+  const n = N > 0 ? Math.ceil(n0 * N / (n0 + N - 1)) : Math.ceil(n0);
+  showToolResult('t16-result',
+    '<div class="big-num">' + n + '<br><span style="font-size:.72rem;color:#0369a1;">CỠ MẪU CẦN</span></div>' +
+    '<div class="row"><span>Độ tin cậy</span><span class="val">' + conf + '% (z=' + z + ')</span></div>' +
+    '<div class="row"><span>Sai số cho phép</span><span class="val">' + fmtVND(e) + '</span></div>' +
+    '<div class="row"><span>Độ lệch chuẩn σ</span><span class="val">' + fmtVND(sd) + '</span></div>' +
+    '<div class="row"><span>Cỡ mẫu sơ bộ n₀</span><span class="val">' + Math.ceil(n0) + '</span></div>' +
+    '<div class="row"><span><strong>Cỡ mẫu cuối</strong></span><span class="val ok">' + n + '</span></div>'
+  );
+};
+
+/* ============================================================
+   QUIZ
+   ============================================================ */
+const quizData = [
+  { q: "Nguyên tắc nào ghi nhận doanh thu khi bán hàng?", opts: ["Giá gốc", "Cơ sở dồn tích", "Thận trọng", "Trọng yếu"], ans: 1, ex: "Cơ sở dồn tích." },
+  { q: "Phương trình kế toán cơ bản?", opts: ["TS = VCSH − Nợ", "TS = Nợ + VCSH", "Nợ = TS + VCSH", "VCSH = TS + Nợ"], ans: 1, ex: "TS = Nợ + VCSH." },
+  { q: "Có bao nhiêu phương pháp kế toán?", opts: ["2", "3", "4", "5"], ans: 2, ex: "4 phương pháp." },
+  { q: "TK 3xx là loại nào?", opts: ["Tài sản", "Nợ phải trả", "Vốn CSH", "Doanh thu"], ans: 1, ex: "Nợ phải trả." },
+  { q: "Ghi sổ kép yêu cầu:", opts: ["1 TK", "Tổng Nợ = Tổng Có", "Nợ > Có", "Không cần"], ans: 1, ex: "Tổng Nợ = Tổng Có." },
+  { q: "Chứng từ có bao nhiêu yếu tố bắt buộc?", opts: ["5", "6", "7", "8"], ans: 2, ex: "7 yếu tố." },
+  { q: "Hình thức ghi sổ phổ biến cho DN nhỏ?", opts: ["NK chứng từ", "NK chung", "CT ghi sổ", "NK-Sổ Cái"], ans: 1, ex: "NK chung." },
+  { q: "Bảng CĐKT phản ánh tại:", opts: ["Một thời điểm", "Một kỳ", "Một năm", "Một quý"], ans: 0, ex: "1 thời điểm." },
+  { q: "Kiểm kê thiếu TS ghi TK nào?", opts: ["3381", "1381", "632", "811"], ans: 1, ex: "1381." },
+  { q: "TK đặc thù KTNN cho TSCĐ sinh học?", opts: ["154", "211", "215", "631"], ans: 2, ex: "215." },
+  { q: "Nguyên giá TSCĐ gồm:", opts: ["Chỉ giá mua", "Giá + Lắp", "Giá + Vận + Lắp + Thuế + Khác", "Giá thị trường"], ans: 2, ex: "5 thành phần." },
+  { q: "Doanh thu ghi bên:", opts: ["Nợ", "Có", "Cả 2", "Không"], ans: 1, ex: "Ghi Có." },
+  { q: "Bảng CĐKT lập khi nào?", opts: ["Hàng ngày", "Cuối kỳ", "Đầu năm", "Khi cần"], ans: 1, ex: "Cuối kỳ." },
+  { q: "SDCK = ?", opts: ["SDĐK + PS tăng", "SDĐK + PS tăng − PS giảm", "PS tăng − PS giảm", "SDĐK − PS giảm"], ans: 1, ex: "Công thức chuẩn." },
+  { q: "Giá thành nông sản = ?", opts: ["Tổng CP × SL", "Tổng CP / SL", "SL / Tổng CP", "CP + SL"], ans: 1, ex: "Tổng CP / SL." }
+];
+let quizAnswers = {};
+
+function renderQuiz() {
+  const container = document.getElementById('quiz-container');
+  if (!container) return;
+  container.innerHTML = '';
+  quizData.forEach(function(item, i) {
+    const div = document.createElement('div');
+    div.className = 'quiz-question';
+    let optsHtml = '';
+    item.opts.forEach(function(opt, j) {
+      const letter = String.fromCharCode(65 + j);
+      optsHtml += '<button class="quiz-opt" data-q="' + i + '" data-o="' + j + '"><span class="letter">' + letter + '</span>' + opt + '</button>';
+    });
+    div.innerHTML = '<h4>Câu ' + (i+1) + ': ' + item.q + '</h4><div class="quiz-options">' + optsHtml + '</div><div class="quiz-feedback" id="qfb-' + i + '"></div>';
+    container.appendChild(div);
+  });
+}
+
+document.addEventListener('click', function(e) {
+  const opt = e.target.closest('.quiz-opt');
+  if (opt && opt.dataset.q !== undefined) {
+    const qIdx = +opt.dataset.q, oIdx = +opt.dataset.o;
+    if (quizAnswers[qIdx] !== undefined) return;
+    quizAnswers[qIdx] = oIdx;
+    const item = quizData[qIdx];
+    const correct = oIdx === item.ans;
+    const qDiv = document.querySelectorAll('.quiz-question')[qIdx];
+    qDiv.querySelectorAll('.quiz-opt').forEach(function(btn, j) {
+      if (j === item.ans) btn.classList.add('correct');
+      else if (j === oIdx) btn.classList.add('wrong');
+    });
+    const fb = document.getElementById('qfb-' + qIdx);
+    fb.classList.add('show', correct ? 'ok' : 'no');
+    fb.innerHTML = correct
+      ? '<strong>✅ Chính xác!</strong> ' + item.ex
+      : '<strong>❌ Chưa đúng.</strong> Đáp án: <strong>' + String.fromCharCode(65 + item.ans) + '. ' + item.opts[item.ans] + '</strong>. ' + item.ex;
+    updateQuizScore();
+  }
+});
+
+function updateQuizScore() {
+  let correct = 0;
+  Object.keys(quizAnswers).forEach(function(k) {
+    if (quizAnswers[k] === quizData[k].ans) correct++;
+  });
+  const el = document.getElementById('quiz-score');
+  if (el) el.textContent = 'Đúng: ' + correct + '/' + quizData.length;
+}
+
+window.resetQuiz = function() {
+  quizAnswers = {};
+  renderQuiz();
+  updateQuizScore();
+};
+
+/* ============================================================
+   FLASHCARD
+   ============================================================ */
+const flashcards = [
+  { q: "Phương trình KT cơ bản?", a: "TS = Nợ + VCSH. VD: 500 = 200 + 300." },
+  { q: "7 nguyên tắc KT?", a: "Cơ sở dồn tích, Hoạt động liên tục, Giá gốc, Nhất quán, Thận trọng, Trọng yếu, Phù hợp." },
+  { q: "Tài sản tăng ghi bên nào?", a: "Nợ. VD: mua phân bón → Nợ 152 tăng." },
+  { q: "Nguồn vốn tăng ghi bên nào?", a: "Có. VD: vay NH → Có 341 tăng." },
+  { q: "4 phương pháp KT?", a: "Chứng từ — Đối ứng — Tính giá — Tổng hợp." },
+  { q: "SDCK tính thế nào?", a: "SDĐK + PS tăng − PS giảm. VD: 100+50−30 = 120." },
+  { q: "5 loại TK chính?", a: "1-2 TS · 3 Nợ · 4 Vốn · 5-7 DT · 6-8 CP." },
+  { q: "Nguyên tắc ghi sổ kép?", a: "Mỗi NV ≥2 TK, tổng Nợ = tổng Có." },
+  { q: "7 yếu tố chứng từ?", a: "Tên, Ngày, Số, ĐV, ND, Tiền, Ký." },
+  { q: "3 hình thức ghi sổ?", a: "NK chung, CT ghi sổ, NK chứng từ." },
+  { q: "4 BCTC chính?", a: "Bảng CĐKT, BC KQKD, BC LCTT, Thuyết minh." },
+  { q: "Bảng CĐKT vs KQKD?", a: "CĐKT = ảnh chụp. KQKD = video." },
+  { q: "Kiểm kê thừa ghi TK nào?", a: "3381 — TS thừa chờ xử lý." },
+  { q: "Kiểm kê thiếu ghi TK nào?", a: "1381 — TS thiếu chờ xử lý." },
+  { q: "TK đặc thù KTNN?", a: "154 (CP dở dang), 215 (TSCĐ sinh học), 611 (mua hàng nông sản)." },
+  { q: "CT giá thành nông sản?", a: "Tổng CP / Sản lượng. VD: 62tr/12.000 = 5.167 đ/kg." },
+  { q: "Nguyên giá TSCĐ gồm?", a: "Giá + Vận + Lắp + Thuế (không hoàn) + Khác." },
+  { q: "Lợi nhuận tính thế nào?", a: "LN = DT − CP. VD: 550−380 = 170tr." },
+  { q: "ROA và ROE?", a: "ROA = LN/Tổng TS. ROE = LN/VCSH." },
+  { q: "Đặc thù KTNN?", a: "Mùa vụ — TSCĐ sinh học — CP dở dang dài — Rủi ro thiên tai." },
+  { q: "TSCĐ sinh học là gì?", a: "TK 215 — vườn cây lâu năm, đàn gia súc sinh sản." },
+  { q: "CP SXKD dở dang là gì?", a: "TK 154 — tập hợp CP trồng trọt, chăn nuôi chưa hoàn thành." },
+  { q: "TSNH vs TSDH?", a: "TSNH <12 tháng, TSDH >12 tháng. VD: heo thịt vs heo nái." },
+  { q: "Hệ số thanh toán NH?", a: "TSNH/Nợ ngắn hạn. VD: 400/200 = 2.0." },
+  { q: "4 loại nghiệp vụ không mất CB?", a: "TS↑NV↑ · TS↑TS↓ · TS↓NV↓ · NV↑NV↓." }
+];
+let fcIndex = 0, fcRevealed = false;
+
+function updateFlashcard() {
+  const card = document.getElementById('flashcard');
+  if (!card) return;
+  card.classList.toggle('revealed', fcRevealed);
+  document.getElementById('fc-q').textContent = flashcards[fcIndex].q;
+  document.getElementById('fc-a').textContent = '→ ' + flashcards[fcIndex].a;
+  document.getElementById('fc-counter').textContent = (fcIndex + 1) + ' / ' + flashcards.length;
+}
+window.toggleFlashcard = function() { fcRevealed = !fcRevealed; updateFlashcard(); };
+window.nextCard = function() { fcIndex = (fcIndex + 1) % flashcards.length; fcRevealed = false; updateFlashcard(); };
+window.prevCard = function() { fcIndex = (fcIndex - 1 + flashcards.length) % flashcards.length; fcRevealed = false; updateFlashcard(); };
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderQuiz();
+updateFlashcard();
+</script>
+</body>
+</html>
